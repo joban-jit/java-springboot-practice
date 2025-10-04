@@ -12,14 +12,14 @@ interface Evaluate<T extends Number> {
 
 public class APIFunctionalInterfaces {
     public static void main(String[] args) throws InterruptedException {
-//        customFnInterface();
-//        predicatePractice();
-//        biPredicatePractice();
-//        passingLambdaFnAsParam();
-//        supplierPractice();
-//        consumerPractice();
-//        functionPractice();
-//        unaryBinaryOperator();
+        customFnInterface();
+        predicatePractice();
+        biPredicatePractice();
+        passingLambdaFnAsParam();
+        supplierPractice();
+        consumerPractice();
+        functionPractice();
+        unaryBinaryOperator();
 
 
     }
