@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class TerminalOperations {
@@ -22,6 +24,77 @@ public class TerminalOperations {
 
     public static void main(String[] args) {
 
+//        commonTerminalOperations();
+        reduceTerminalOperation();
+
+
+
+    }
+
+    private static void reduceTerminalOperation(){
+        // the reduce() method combines a stream into a single object.
+        // It is a reduction, which means it processes all elements.
+        // most common way of doing a reduction is to start with an initial value
+        // and keep merging it with the next value.
+
+        // T reduce(T identity, BinaryOperator<T> accumulator)
+        // and BinaryOperator<T> has this method T apply(T,T); accept and return same type
+        // The "identity": is initial value of the reduction and also what is returned if stream is empty.
+        // This means that there will always be a result and thus Optional is not the return type
+        // (on this version of reduce())
+        // The "accumulator" combines the current result with the current value in the stream.
+
+        String name = Stream.of("s", "e","a","n")
+//                .filter(s->s.length()>2) // if filter out then first reduce -> "nothing" and 2nd reduce=> ""(empty str)
+//                .reduce("nothing", (s,c)->s+c); // nothings, nothingse, nothingsea, nothingsean
+                .reduce("", (s,c)->s+c); // s, se, sea, sean
+        System.out.println(name); // sean
+
+        Integer product = Stream.of(2, 3, 4)
+                .reduce(1, (a, b) -> a * b);
+        System.out.println(product);
+        Integer totalSum = Stream.of(2, 3, 4).reduce(0, (a, b) -> a + b);
+        System.out.println(totalSum);
+        int n = 5;
+        int factorial = IntStream.rangeClosed(1, n).reduce(1, (a, b) -> a * b);
+        System.out.println(factorial);
+
+        // Optional<T> reduce(BinaryOperator<T> accumulator)
+        // when you leave out the identity, an Optional is returned because there may not be any data
+        // (all the elements could have been filtered out earlier).
+        // There are 3 possible results:
+        //          a) empty stream => empty Optional returned
+        //          b) one element in stream => that element is returned
+        //          c) multiple elements in stream => accumulator is applied
+
+        BinaryOperator<Integer> op = (a,b)-> a+b;
+        Stream<Integer> empty = Stream.empty();
+        Stream<Integer> oneElement = Stream.of(6);
+        Stream<Integer> multipleElements = Stream.of(3,4,5);
+        empty.reduce(op).ifPresent(System.out::println); // no output
+        oneElement.reduce(op).ifPresent(System.out::println); // 6
+        multipleElements.reduce(op).ifPresent(System.out::println); // 12
+
+        // why not just require the identity and remove this method?
+        // Sometimes it is nice to know if the stream is empty as opposed to the case where there is value
+        // returned from the accumulator that happens to match the identity (however unlikely).
+
+        Integer val = Stream.of(1, 1, 1)
+//                .filter(i->i>5) //
+                .reduce(1, (a, b) -> a); // would return 1
+        System.out.println(val);
+        // in above example: we will get return value as 1 , if we use the filter (stream is filtered out so it is empty) then it is identity , if we don't use
+        // filter then it is accumulator. so we are getting same result for both 1. stream is empty and 2. stream is not empty
+        // so this is reason we have two versions of reduce with and without identity
+
+        // <U> U reduce(U identity, BiFunction accumulator, BinaryOperator combiner)
+        // we use this version when we are dealing with different types
+
+
+
+    }
+
+    private static void commonTerminalOperations() {
         // count
         long count = Stream.of("dog", "cat")
                 .count();
@@ -59,8 +132,6 @@ public class TerminalOperations {
         // because streams do not implement the Iterable interface
         // e.g. Stream<Integer> s = Stream.of(1);
         // for(Integer i: s){} // error: required array or Iterable
-
-
     }
 
 }
