@@ -25,7 +25,9 @@ public class TerminalOperations {
     public static void main(String[] args) {
 
 //        commonTerminalOperations();
-        reduceTerminalOperation();
+//        reduceTerminalOperation();
+
+
 
 
 
@@ -105,6 +107,9 @@ public class TerminalOperations {
                                (n1,n2)-> n1+n2 // n1 and n2 are results BiFunction and both are integer
                        );
         System.out.println(length);
+        // this approach is mainly used with parallel stream, so "car" and "bus" can be taken by one thread and "train"
+        // and "airplane" can be taken by another thread so result from thread 1 => 6 and result from thread 2 => 14,
+        // and you can combine those together using combiner (BinaryOperator combiner) and get 19 as final result
 
         // another way to write it
         int sum = Stream.of("car", "bus", "train", "airplane")
