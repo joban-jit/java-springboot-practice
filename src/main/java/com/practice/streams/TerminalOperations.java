@@ -88,8 +88,29 @@ public class TerminalOperations {
         // so this is reason we have two versions of reduce with and without identity
 
         // <U> U reduce(U identity, BiFunction accumulator, BinaryOperator combiner)
-        // we use this version when we are dealing with different types
+        // we use this version when we are dealing with different types, allowing us to create "intermediate reductions"
+        // and then combine them at the end.
+        // This is useful when working with parallel streams - the streams can be decomposed and reassembled
+        // by separate threads.
+        // For example, if wanted to count the length of four 1000-character strings, the first 2 values and last 2 values
+        // could be calculated independently. The intermediate results(2000) would be then be combined into a final value
+        // (4000).
 
+        // example: we want to count the number of characters in each string
+        Stream<String> stream = Stream.of("car", "bus", "train", "airplane");
+
+               int length = stream.parallel()
+                       .reduce(0,
+                               (n0, str) -> n0 + str.length(), // n0 is Integer
+                               (n1,n2)-> n1+n2 // n1 and n2 are results BiFunction and both are integer
+                       );
+        System.out.println(length);
+
+        // another way to write it
+        int sum = Stream.of("car", "bus", "train", "airplane")
+                .mapToInt(String::length)
+                .sum();
+        System.out.println(sum);
 
 
     }
