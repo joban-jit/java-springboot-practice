@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
@@ -26,9 +27,41 @@ public class TerminalOperations {
 
 //        commonTerminalOperations();
 //        reduceTerminalOperation();
+        collectTerminalOperation();
 
 
 
+
+
+    }
+
+    private static void collectTerminalOperation(){
+
+        // This is special type of reduction called a mutable reduction because we use same mutable object while
+        // accumulating. This makes it more efficient than regular reductions.
+        // Common mutable objects are StringBuilder and ArrayList
+        // It is really useful method as it lets us get data out of streams and into other forms
+        // e.g. Map's, List's and Set's
+
+        // StringBuilder collect(Supplier<StringBuilder> supplier,
+        //                  BiConsumer<StringBuilder, String> accumulator,
+        //        BiConsumer<StringBuilder, StringBuilder> combiner)
+        // this is version is used when you want complete control over how collecting should work.
+        // the accumulator adds and element to the collections. e.g. the next String to the StringBuilder.
+        // combiner takes two collections and merges them. It is useful in parallel processing
+
+        StringBuilder word = Stream.of("ad", "jud", "i", "cate").parallel()
+                .collect(() -> new StringBuilder(), // StringBuilder::new
+                        (sb, str) -> sb.append(str), // StringBuilder::append
+                        (sb1, sb2) -> sb1.append(sb2) // StringBuilder::append
+                );
+        System.out.println(word); //adjudicate
+        // in accumulator
+        // e.g. thread 1-> "adjud"
+        // thread 2 returns "icate"
+        // in combiner
+        // "adjud" + "icate" combined into "adjudicate"
+        // so this approach can be beneficial for parallel streams
 
 
     }
