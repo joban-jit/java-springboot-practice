@@ -27,7 +27,50 @@ public class TerminalOperations {
 //        commonTerminalOperations();
 //        reduceTerminalOperation();
 //        collectWithManualControlTerminalOperation();
-        collectApiDefinedCollectorsTerminalOperation();
+//        collectApiDefinedCollectorsTerminalOperation();
+        collectCollectorsGroupingByTerminalOperation();
+
+    }
+
+    private static void collectCollectorsGroupingByTerminalOperation() {
+        // groupingBy() tells collect() to group all of the elements into a Map
+        // it takes a Function which determines the keys in the Map
+        // Each value is a List of all entries that match that key, The List is a default value but can be changed e.g. to Set
+
+        Map<Integer, List<String>> groupByLength = Stream.of("Joe", "Tom", "Tom", "Alan", "Peter")
+                .collect(
+                        // Passing in a Function that determines the key in the Map
+                        Collectors.groupingBy(String::length)
+                );
+        System.out.println(groupByLength); //{3=[Joe, Tom, Tom], 4=[Alan], 5=[Peter]}
+
+        // in above, we have duplicates Tom and Tom as value of those keys in Map is List
+        // so we can override that to use Set
+        // How: by passing a "downstream collector"- This is a collector that does something special with values
+        // in our case it is telling collectors to use set
+        Map<Integer, Set<String>> groupByLengthWithoutDuplicates = Stream.of("Joe", "Tom", "Tom", "Alan", "Peter")
+                .collect(
+                        Collectors.groupingBy(
+                                s->s.length(), // key Function
+                                Collectors.toSet() // what to do with the values
+                        )
+                );
+        System.out.println(groupByLengthWithoutDuplicates); //{3=[Joe, Tom], 4=[Alan], 5=[Peter]}
+
+        // There is no guarantees on the type of Map returned
+        // what if we wanted to ensure we got back a TreeMap but leave the values as List?
+        // we can achieve this by using the "map type supplier" while passing down the toList collector.
+         TreeMap<Integer, List<String>> treeMapWithGroupingBy = Stream.of("Joe", "Tom", "Tom", "Alan", "Peter")
+                .collect(
+                        Collectors.groupingBy(
+                                s->s.length(),
+                                ()->new TreeMap<>(), // Supplier: which map type , in our case TreeMap
+                                Collectors.toList() // downstream collector
+                        )
+                );
+        System.out.println(treeMapWithGroupingBy); //{3=[Joe, Tom, Tom], 4=[Alan], 5=[Peter]}
+        System.out.println(treeMapWithGroupingBy.getClass()); //class java.util.TreeMap
+
 
     }
 
