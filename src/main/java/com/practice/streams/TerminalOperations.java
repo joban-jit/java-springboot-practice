@@ -1,12 +1,11 @@
 package com.practice.streams;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.awt.image.ImageProducer;
+import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -27,15 +26,71 @@ public class TerminalOperations {
 
 //        commonTerminalOperations();
 //        reduceTerminalOperation();
-        collectTerminalOperation();
-
-
-
-
+//        collectWithManualControlTerminalOperation();
+        collectApiDefinedCollectorsTerminalOperation();
 
     }
 
-    private static void collectTerminalOperation(){
+    private static void collectApiDefinedCollectorsTerminalOperation() {
+        // version of collect()- the one that accepts pre-defined collectors from API
+        // we access these collectors via static methods on the Collectors interface
+
+        String s0 = Stream.of("cake", "biscuits", "apple tart")
+                .collect(Collectors.joining(", "));
+        System.out.println(s0); //cake, biscuits, apple tart
+
+        Double avg = Stream.of("cake", "biscuits", "apple tart")
+                .collect(Collectors.averagingInt(s -> s.length()));
+        // averagingInt(ToIntFunction) => int applyAsInt(T value)
+        System.out.println(avg); //7.333333333333333
+
+        // Collecting into Maps: two functions required
+        // first function: tells collector how to create key
+        // second function: tells collector how to create the value
+        Map<String, Integer> map = Stream.of("cake", "biscuits", "apple tart")
+                .collect(Collectors.toMap(
+                        Function.identity(), // function for key === s->s
+                        String::length)); // function for value === s-> s.length()
+        System.out.println(map);
+
+        // we want a map: number of characters in dessert name as key, dessert name as value
+        // now we have this stream of "cake", "biscuits", "tart"
+        // where cake and tart has same length so , in java we can't have duplicate keys
+        // this leads to an exception as java doesn't know what to do ...
+        // IllegalStateException: duplicate key 4
+        // To get around this, we can supply a merge function, whereby we append the colliding keys values together
+//        mergeFunction – a merge function, used to resolve collisions between values associated with the same key
+        Map<Integer, String> mapWithAppend = Stream.of("cake", "biscuits", "tart")
+                .collect(
+                        Collectors.toMap(
+                                s -> s.length(), // key is the length
+                                s -> s, // value is the string
+                                (s1, s2) -> s1 + ", " + s2 // (BinaryOperator)Merge function - what to do if we have duplicate keys
+                                // -- append the values.
+                        )
+                );
+        System.out.println(mapWithAppend); //{4=cake, tart, 8=biscuits}
+        System.out.println(mapWithAppend.getClass()); //class java.util.HashMap
+
+        // the maps returned are HashMaps but this is not guaranteed. What if we wanted a TreeMap implementation
+        // so our keys would be sorted. The last argument caters for this
+
+        TreeMap<String, Integer> treeMapOfDesserts = Stream.of("cake", "biscuits", "apple tart", "cake")
+                .collect(
+                        Collectors.toMap(
+                                s -> s,
+                                s -> s.length(),
+                                (len1, len2) -> len1 + len2, // merge function as we have duplicate values in keys "cake" so we need to keep
+                                // one key and adjust the value using this function: so we are adding the lengths
+                                () -> new TreeMap<>() // mapFactory – a supplier providing a new empty Map into which the results will be inserted
+                        )
+                );
+        System.out.println(treeMapOfDesserts); //{apple tart=10, biscuits=8, cake=8}
+        System.out.println(treeMapOfDesserts.getClass()); //class java.util.TreeMap
+
+    }
+
+    private static void collectWithManualControlTerminalOperation(){
 
         // This is special type of reduction called a mutable reduction because we use same mutable object while
         // accumulating. This makes it more efficient than regular reductions.
