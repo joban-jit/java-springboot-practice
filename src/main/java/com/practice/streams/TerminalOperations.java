@@ -28,7 +28,44 @@ public class TerminalOperations {
 //        reduceTerminalOperation();
 //        collectWithManualControlTerminalOperation();
 //        collectApiDefinedCollectorsTerminalOperation();
-        collectCollectorsGroupingByTerminalOperation();
+//        collectCollectorsGroupingByTerminalOperation();
+        collectCollectorsPartitioningByTerminalOperation();
+
+    }
+
+    private static void collectCollectorsPartitioningByTerminalOperation() {
+        // Partitioning is a special case of grouping where there are only two possible groups - true and false
+        // The keys will be the booleans true and false
+        // default values is List
+        // we pass predicate
+        Stream<String> names = Stream.of("Thomas", "Teresa", "Mike", "Alan", "Peter");
+        Map<Boolean, List<String>> partitioningByT = names.collect(
+                // pass in a Predicate
+                Collectors.partitioningBy(s -> s.startsWith("T"))
+        );
+        System.out.println(partitioningByT); //{false=[Mike, Alan, Peter], true=[Thomas, Teresa]}
+
+        Map<Boolean, List<String>> partitioningByLength = Stream.of("Thomas", "Teresa", "Mike", "Alan", "Peter")
+                .collect(Collectors.partitioningBy(s -> s.length() > 4));
+        System.out.println(partitioningByLength); //{false=[Mike, Alan], true=[Thomas, Teresa, Peter]}
+
+        Map<Boolean, List<String>> partitioningByToShowEmptyList = Stream.of("Thomas", "Teresa", "Mike", "Alan", "Peter")
+                .collect(Collectors.partitioningBy(s -> s.length() > 10));
+        // empty list
+        System.out.println(partitioningByToShowEmptyList); //{false=[Thomas, Teresa, Mike, Alan, Peter], true=[]}
+
+        // changing value from List to Set
+        Map<Boolean, Set<String>> partitioningByWithSet = Stream.of("Alan", "Teresa", "Mike", "Alan", "Peter")
+                .collect(Collectors.partitioningBy(
+                                s -> s.length() > 4,
+                                Collectors.toSet()
+                        )
+                );
+        // double Alan is removed with Set
+        System.out.println(partitioningByWithSet); //{false=[Mike, Alan], true=[Teresa, Peter]}
+
+
+
 
     }
 
@@ -51,7 +88,7 @@ public class TerminalOperations {
         Map<Integer, Set<String>> groupByLengthWithoutDuplicates = Stream.of("Joe", "Tom", "Tom", "Alan", "Peter")
                 .collect(
                         Collectors.groupingBy(
-                                s->s.length(), // key Function
+                                s -> s.length(), // key Function
                                 Collectors.toSet() // what to do with the values
                         )
                 );
@@ -60,11 +97,11 @@ public class TerminalOperations {
         // There is no guarantees on the type of Map returned
         // what if we wanted to ensure we got back a TreeMap but leave the values as List?
         // we can achieve this by using the "map type supplier" while passing down the toList collector.
-         TreeMap<Integer, List<String>> treeMapWithGroupingBy = Stream.of("Joe", "Tom", "Tom", "Alan", "Peter")
+        TreeMap<Integer, List<String>> treeMapWithGroupingBy = Stream.of("Joe", "Tom", "Tom", "Alan", "Peter")
                 .collect(
                         Collectors.groupingBy(
-                                s->s.length(),
-                                ()->new TreeMap<>(), // Supplier: which map type , in our case TreeMap
+                                s -> s.length(),
+                                () -> new TreeMap<>(), // Supplier: which map type , in our case TreeMap
                                 Collectors.toList() // downstream collector
                         )
                 );
@@ -133,7 +170,7 @@ public class TerminalOperations {
 
     }
 
-    private static void collectWithManualControlTerminalOperation(){
+    private static void collectWithManualControlTerminalOperation() {
 
         // This is special type of reduction called a mutable reduction because we use same mutable object while
         // accumulating. This makes it more efficient than regular reductions.
@@ -164,7 +201,7 @@ public class TerminalOperations {
 
     }
 
-    private static void reduceTerminalOperation(){
+    private static void reduceTerminalOperation() {
         // the reduce() method combines a stream into a single object.
         // It is a reduction, which means it processes all elements.
         // most common way of doing a reduction is to start with an initial value
@@ -177,10 +214,10 @@ public class TerminalOperations {
         // (on this version of reduce())
         // The "accumulator" combines the current result with the current value in the stream.
 
-        String name = Stream.of("s", "e","a","n")
+        String name = Stream.of("s", "e", "a", "n")
 //                .filter(s->s.length()>2) // if filter out then first reduce -> "nothing" and 2nd reduce=> ""(empty str)
 //                .reduce("nothing", (s,c)->s+c); // nothings, nothingse, nothingsea, nothingsean
-                .reduce("", (s,c)->s+c); // s, se, sea, sean
+                .reduce("", (s, c) -> s + c); // s, se, sea, sean
         System.out.println(name); // sean
 
         Integer product = Stream.of(2, 3, 4)
@@ -200,10 +237,10 @@ public class TerminalOperations {
         //          b) one element in stream => that element is returned
         //          c) multiple elements in stream => accumulator is applied
 
-        BinaryOperator<Integer> op = (a,b)-> a+b;
+        BinaryOperator<Integer> op = (a, b) -> a + b;
         Stream<Integer> empty = Stream.empty();
         Stream<Integer> oneElement = Stream.of(6);
-        Stream<Integer> multipleElements = Stream.of(3,4,5);
+        Stream<Integer> multipleElements = Stream.of(3, 4, 5);
         empty.reduce(op).ifPresent(System.out::println); // no output
         oneElement.reduce(op).ifPresent(System.out::println); // 6
         multipleElements.reduce(op).ifPresent(System.out::println); // 12
@@ -232,11 +269,11 @@ public class TerminalOperations {
         // example: we want to count the number of characters in each string
         Stream<String> stream = Stream.of("car", "bus", "train", "airplane");
 
-               int length = stream.parallel()
-                       .reduce(0,
-                               (n0, str) -> n0 + str.length(), // n0 is Integer
-                               (n1,n2)-> n1+n2 // n1 and n2 are results BiFunction and both are integer
-                       );
+        int length = stream.parallel()
+                .reduce(0,
+                        (n0, str) -> n0 + str.length(), // n0 is Integer
+                        (n1, n2) -> n1 + n2 // n1 and n2 are results BiFunction and both are integer
+                );
         System.out.println(length);
         // this approach is mainly used with parallel stream, so "car" and "bus" can be taken by one thread and "train"
         // and "airplane" can be taken by another thread so result from thread 1 => 6 and result from thread 2 => 14,
@@ -264,7 +301,7 @@ public class TerminalOperations {
         minLength.ifPresent(System.out::println);
         // Optional<T> max(Comparator)
         Comparator<Integer> maxValueComparator = Integer::compare;
-        Optional<Integer> maxValue = Stream.of(4,6,2,12,9)
+        Optional<Integer> maxValue = Stream.of(4, 6, 2, 12, 9)
                 .max(maxValueComparator);
         maxValue.ifPresent(System.out::println);
 
@@ -279,7 +316,7 @@ public class TerminalOperations {
 
         // anyMatch, allMatch, noneMatch
         List<String> names = Arrays.asList("Alan", "Brian", "Colin");
-        Predicate<String> pred = name-> name.startsWith("A");
+        Predicate<String> pred = name -> name.startsWith("A");
         System.out.println(names.stream().anyMatch(pred)); // true (one does)
         System.out.println(names.stream().allMatch(pred)); // false ( not all match, two don't)
         System.out.println(names.stream().noneMatch(pred)); // false (one does)
