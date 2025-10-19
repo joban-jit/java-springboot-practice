@@ -20,6 +20,29 @@ public class APIFunctionalInterfaces {
         consumerPractice();
         functionPractice();
         unaryBinaryOperator();
+        // Note: some extra Functional Interface and their methods
+        /*
+        IntSupplier          => int getAsInt()
+        IntConsumer          => void accept(int value)
+        IntPredicate         => boolean test(int value)
+        IntFunction<R>       => R apply(int value)
+        IntUnaryOperator     => int applyAsInt(int operand)
+        IntBinaryOperator    => int applyAsInt(int left, int right)
+
+        LongSupplier          => long getAsLong()
+        LongConsumer          => void accept(long value)
+        LongPredicate         => boolean test(long value)
+        LongFunction<R>       => R apply(long value)
+        LongUnaryOperator     => long applyAsLong(long operand)
+        LongBinaryOperator    => long applyAsLong(long left, long right)
+
+        DoubleSupplier          => double getAsDouble()
+        DoubleConsumer          => void accept(double value)
+        DoublePredicate         => boolean test(double value)
+        DoubleFunction<R>       => R apply(double value)
+        DoubleUnaryOperator     => double applyAsDouble(double operand)
+        DoubleBinaryOperator    => double applyAsDouble(double left, double right)
+         */
 
 
     }
