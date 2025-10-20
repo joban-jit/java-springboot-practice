@@ -1,4 +1,4 @@
-package com.practice.virtualThreads;
+package com.practice.concurrency.virtualThreads;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;

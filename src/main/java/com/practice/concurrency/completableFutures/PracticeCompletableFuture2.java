@@ -1,4 +1,4 @@
-package com.practice.completableFutures;
+package com.practice.concurrency.completableFutures;
 
 
 import java.util.Random;
