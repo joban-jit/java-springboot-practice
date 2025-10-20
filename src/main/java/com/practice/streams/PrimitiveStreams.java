@@ -1,9 +1,7 @@
 package com.practice.streams;
 
-import java.util.Arrays;
-import java.util.IntSummaryStatistics;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.*;
 
 public class PrimitiveStreams {
@@ -17,10 +15,9 @@ public class PrimitiveStreams {
         // Other primitive types like short, byte and char → must be boxed or mapped to one of the above
 
 
-//        creatingPrimitiveStream();
-        primitiveStreamsAPIs();
+        creatingPrimitiveStream();
+//        primitiveStreamsAPIs();
         // Note on some extra functional interfaces
-
 
 
     }
@@ -41,10 +38,10 @@ public class PrimitiveStreams {
         System.out.println(min.orElseThrow()); // 10.0
         OptionalDouble average = LongStream.of(10L, 20L, 30L).average();
         // if not present it will use some default value here
-        average.ifPresentOrElse(System.out::println, ()->Double.valueOf(0)); //20.0
+        average.ifPresentOrElse(System.out::println, () -> Double.valueOf(0)); //20.0
 
         // summaryStatistics()
-        intStats(IntStream.of(5,10,15,20));
+        intStats(IntStream.of(5, 10, 15, 20));
         //Min: 5
         //Max: 20
         //Average: 12.5
@@ -58,20 +55,21 @@ public class PrimitiveStreams {
         //Count: 0
 
     }
-    private static void intStats(IntStream numbers){
+
+    private static void intStats(IntStream numbers) {
         // note: here min, max, average doesn't come as Optional but  primitive
         // summaryStatistics is terminal operation
         IntSummaryStatistics intStats = numbers.summaryStatistics();
         int min = intStats.getMin();
-        System.out.println("Min: "+ min);
+        System.out.println("Min: " + min);
         int max = intStats.getMax();
-        System.out.println("Max: "+ max);
+        System.out.println("Max: " + max);
         double average = intStats.getAverage();
-        System.out.println("Average: "+ average);
+        System.out.println("Average: " + average);
         long sum = intStats.getSum();
-        System.out.println("Sum: "+ sum);
+        System.out.println("Sum: " + sum);
         long count = intStats.getCount();
-        System.out.println("Count: "+ count);
+        System.out.println("Count: " + count);
 
     }
 
@@ -95,12 +93,12 @@ public class PrimitiveStreams {
         IntStream iStream2 = IntStream.of(1, 2, 3);
         DoubleStream dStream2 = DoubleStream.of(1.1, 2.2, 3.3);
         LongStream lStream2 = LongStream.of(1L, 2L, 3L);
-        System.out.println(iStream2.count()+ ", "+dStream2.count()+", "+lStream2.count()); //3, 3, 3
+        System.out.println(iStream2.count() + ", " + dStream2.count() + ", " + lStream2.count()); //3, 3, 3
 
         // let's say we want to total sum of numbers in as stream
         // without IntStream and using Stream and reduce(identity, accumulator)
-        Stream<Integer> numbers = Stream.of(1,2,3);
-        System.out.println(numbers.reduce(0, (a,b)->a+b)); // 6
+        Stream<Integer> numbers = Stream.of(1, 2, 3);
+        System.out.println(numbers.reduce(0, (a, b) -> a + b)); // 6
 
         // Using IntStream and sum method
         IntStream intStream = IntStream.of(1, 2, 3);
@@ -110,6 +108,47 @@ public class PrimitiveStreams {
         // using map(), mapToDouble(), mapToInt(), mapToLong()...we have a couple of overloaded
         // methods of these where it accepts different of types of streams, like Stream of Integer, Double or Long
 
+        //  mapping Object Stream
+
+        // Stream<T> to Stream<T>
+        Stream.of("ash", "beech", "sycamore")
+                .map(tree -> tree.toUpperCase())
+                .forEach(System.out::println);
+
+        // Stream<T> to DoubleStream
+        Stream.of("ash", "beech", "sycamore")
+                .mapToDouble(tree -> tree.length())// upcast in background
+                .forEach(System.out::println);
+
+        // Stream<T> to IntStream
+        Stream.of("ash", "beech", "sycamore")
+                .mapToInt(tree -> tree.length())
+                .forEach(System.out::println);
+
+        // Stream<T> to LongStream
+        Stream.of("ash", "beech", "sycamore")
+                .mapToLong(tree -> tree.length()) // upcast in background
+                .forEach(System.out::println);
+
+        // mapping primitive streams
+        // IntStream to Stream<T>
+        IntStream.of(1, 2, 3)
+                .mapToObj(n -> "Number: " + n)
+                .forEach(System.out::println);
+        // IntStream to DoubleStream
+        IntStream.of(1, 2, 3)
+                .mapToDouble(n -> n)
+                .forEach(System.out::println);
+
+        // IntStream to IntStream
+        IntStream.of(1, 2, 3)
+                .map(n -> n * 2)
+                .forEach(System.out::println);
+
+        // IntStream to LongStream
+        IntStream.of(1, 2, 3)
+                .mapToLong(n -> n)
+                .forEach(System.out::println);
 
 
     }
