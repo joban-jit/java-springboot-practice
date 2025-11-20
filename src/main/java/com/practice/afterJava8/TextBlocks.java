@@ -1,4 +1,4 @@
-package com.practice.java17;
+package com.practice.afterJava8;
 
 public class TextBlocks {
     /*

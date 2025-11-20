@@ -22,6 +22,8 @@ public class PrimeCheck {
 
     }
 
+
+
     private static void primeOptimized(int n){
         boolean isPrime = true;
         if (n<=1){

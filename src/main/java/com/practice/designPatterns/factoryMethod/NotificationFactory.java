@@ -1,5 +1,9 @@
 package com.practice.designPatterns.factoryMethod;
-
+/*
+The Factory Method Pattern Explained
+Problem Solved: Avoids specifying the exact class of object to create. You use a factory method to create objects, making it easy to swap out implementations without changing client code
+Classic Use-Case: When your application needs to support different types of objects with similar behavior or interface (e.g., different types of payment methods, notification channels, transport vehicles)
+ */
 interface Notification{
     void notifyUser(String message);
 }
@@ -32,6 +36,6 @@ public class NotificationFactory {
     public static void main(String[] args) {
         NotificationFactory notificationFactory = new NotificationFactory();
         Notification notification = notificationFactory.createNotification("SMS");
-        notification.notifyUser("Hellooooo!");
+        notification.notifyUser("Hello!");
     }
 }

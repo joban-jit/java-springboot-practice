@@ -2,7 +2,12 @@ package com.practice.designPatterns.builder;
 
 import lombok.Getter;
 import lombok.ToString;
-
+/*
+Your object has many fields, some optional.
+You want to avoid using many constructor overloads.
+You want a readable way to create immutable or complex objects.
+Construction logic might involve several steps.
+ */
 @Getter
 @ToString
 public class User {
