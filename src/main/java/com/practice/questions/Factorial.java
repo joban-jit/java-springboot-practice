@@ -8,7 +8,7 @@ public class Factorial {
             fact*=i;
         }
         System.out.println(fact);
-
+//F(n) = F(1)*F(2)...F(n-1)*F(n)
         System.out.println(factorial(5));
 
     }

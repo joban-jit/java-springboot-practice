@@ -33,14 +33,25 @@ public class ReverseThings {
         // Using collection to reverse same list:- best way
         Collections.reverse(list);
         System.out.println(list);
+
+        // reverse linked list
+        LinkedList<Integer> ll = new LinkedList<>();
+
+        ll.add(1);
+        ll.add(2);
+        ll.add(3);
+        LinkedList<Integer> ll1 = new LinkedList<>();
+
+        ll.descendingIterator().forEachRemaining(ll1::add);
+        System.out.println(ll1); //[3, 2, 1]
     }
 
     private static void manuallyReverseString(String str) {
 //        // without built-in reverse()
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for(int i = str.length()-1; i>=0; i--){
 //            result = result + str.charAt(i);
-            result+= str.charAt(i);
+            result.append(str.charAt(i));
         }
 
         System.out.println(result);
