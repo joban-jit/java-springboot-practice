@@ -9,10 +9,12 @@ public class StringRelated {
     public static void main(String[] args) {
 
         String str = "Hello world";
-//        reverseString(str);
+        reverseString(str);
 //        createStringOutOfCharArray();
-        getCountOfDistinctCharactersInString();
+//        getCountOfDistinctCharactersInString();
 
+        palindromeCheck("abcba"); // true
+        palindromeCheck("abc"); // false
 
     }
 
@@ -71,6 +73,17 @@ public class StringRelated {
                 .toString();
         System.out.println(usingStringChars);
 
+        // reverse words in sentence
+        String sentence = "My name is Harry";
+        StringBuilder reversed_sb = new StringBuilder();
+        String[] wordArray  = sentence.split(" ");
+        for(int i= wordArray.length-1;i>=0;i--){
+            reversed_sb.append(wordArray[i]).append(" ");
+        }
+        System.out.println(reversed_sb.toString().trim());
+
+
+
     }
 
 
@@ -127,6 +140,18 @@ public class StringRelated {
         }
         System.out.println(counts);
 
+    }
+
+    private static void palindromeCheck(String str){
+
+        boolean isPalindromeCheck = true;
+        for(int i = 0;i<str.length()/2;i++){
+            if(str.charAt(i)!=str.charAt(str.length()-1-i)){
+                isPalindromeCheck = false;
+                break;
+            }
+        }
+        System.out.println(isPalindromeCheck);
     }
 
 }

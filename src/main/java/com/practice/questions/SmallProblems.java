@@ -17,6 +17,8 @@ public class SmallProblems {
 //        printDateInSpecificFormat();
 //        mergeTwoLists();
         sortHashMapByValue();
+        sumOfDigitsOfGivenNumber(3754132);
+        countVowels();
 
 
     }
@@ -47,6 +49,18 @@ public class SmallProblems {
         System.out.println(s1.toLowerCase().matches(".*[aieou].*")); // true
         String s2 = "TV";
         System.out.println(s2.toLowerCase().matches(".*[aieou].*")); // false
+    }
+
+    private static void countVowels(){
+        String s1 = "Hello";
+        int count =0;
+        char[] charArray = s1.toLowerCase().toCharArray();
+        for(char ch:charArray){
+            if("aieou".indexOf(ch)!=-1){
+                count++;
+            }
+        }
+        System.out.println(count);
     }
 
     private static void swapTwoNumbersWithoutThird() {
@@ -99,6 +113,44 @@ public class SmallProblems {
                 ));
 
         System.out.println(sortedByValueLinkedHashMap);
+
+
+    }
+
+    private static void sumOfDigitsOfGivenNumber(int n){
+
+        // below approach is not good
+        // Splitting string into an array and converting back to numbers is heavier than necessary.
+        // String.split("") creates extra objects and is less efficient than using math
+
+        String str = String.valueOf(n);
+        String[] stringDigitArray = str.split("");
+        int sum = Arrays.stream(stringDigitArray)
+                .mapToInt(s -> Integer.parseInt(s))
+                .sum();
+        System.out.println(sum);//25
+
+        // if we want to still use streams, this is slightly better way
+        // .map(c -> c - '0')
+        //
+
+        int sum1 = String.valueOf(n) // let's say n = 1234
+                .chars()// IntStream of ASCII values of each character e.g. 49 50 51 52
+                .map(c -> c - '0')//This converts each ASCII code to the actual digit.
+                // '0' has ASCII value 48 so by subtracting 48 we get actual digit
+                // 49 − 48 = 1, 50 − 48 =2, 51 − 48=3, 52 − 48=4
+                .sum();
+
+        System.out.println(sum1); // 25
+
+
+        // best way - using arithmetic
+        int sum2 = 0;
+        while(n>0){
+            sum2 = sum2+n%10; //n % 10 gives the last digit of the number.
+            n = n/10; //Since n is an integer, dividing by 10 drops the decimal part:
+        }
+        System.out.println(sum2); //25
 
 
     }

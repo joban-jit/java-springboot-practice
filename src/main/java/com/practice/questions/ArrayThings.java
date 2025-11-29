@@ -32,6 +32,9 @@ public class ArrayThings {
         // shuffle an array
         shuffleAnArray();
 
+        // largest in array using for loop
+        findLargestInArray();
+
     }
 
     private static void shuffleAnArray() {
@@ -70,7 +73,7 @@ public class ArrayThings {
                 second=first;
                 first = num;
             }else if (num>second && num!=first){
-                // this condition is used to handle duplicates largest number
+                // this num!=first condition is used to handle duplicates largest number
                 second = num;
             }
         }
@@ -111,6 +114,18 @@ public class ArrayThings {
         );
         System.out.println(equals);
 
+    }
+
+    private static void findLargestInArray(){
+        int[] arr = {10, 20, 4, 100, 99};
+//        int largest = Integer.MIN_VALUE; // use this if you are not sure array is empty or not
+        int largest = arr[0];
+        for(int num : arr){
+            if(num>largest){
+                largest = num;
+            }
+        }
+        System.out.println(largest);
     }
 
     }
