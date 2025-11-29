@@ -4,16 +4,33 @@ import java.time.LocalDate;
 
 public class LegacySingleton {
     private static LegacySingleton legacySingleton;
-    private LegacySingleton(){}
+    private static volatile LegacySingleton instance;
 
-    public synchronized static  LegacySingleton getLegacySingleton() {
-        if(legacySingleton==null){
+    private LegacySingleton() {
+    }
+
+    public synchronized static LegacySingleton getLegacySingleton() {
+        if (legacySingleton == null) {
             legacySingleton = new LegacySingleton();
         }
         return legacySingleton;
     }
 
-    public void printDate(){
+    // Thread safe Singleton using double-checked locking
+    // using volatile and synchronized block
+    public static LegacySingleton getInstance() {
+        if (instance == null) {
+            synchronized (LegacySingleton.class) {
+                if (instance == null) {
+                    instance = new LegacySingleton();
+                }
+            }
+
+        }
+        return instance;
+    }
+
+    public void printDate() {
         System.out.println(LocalDate.now());
     }
 }

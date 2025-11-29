@@ -13,8 +13,10 @@ public class StringRelated {
 //        createStringOutOfCharArray();
 //        getCountOfDistinctCharactersInString();
 
-        palindromeCheck("abcba"); // true
-        palindromeCheck("abc"); // false
+//        palindromeCheck("abcba"); // true
+//        palindromeCheck("abc"); // false
+        System.out.println(anagramCheck("race", "card")); // false
+        System.out.println(anagramCheck("listen", "silent")); // true
 
     }
 
@@ -143,7 +145,8 @@ public class StringRelated {
     }
 
     private static void palindromeCheck(String str){
-
+        // madam
+        //string == reverse(string)
         boolean isPalindromeCheck = true;
         for(int i = 0;i<str.length()/2;i++){
             if(str.charAt(i)!=str.charAt(str.length()-1-i)){
@@ -152,6 +155,20 @@ public class StringRelated {
             }
         }
         System.out.println(isPalindromeCheck);
+    }
+
+    private static boolean anagramCheck(String str1, String str2){
+        // race - care : same characters in both strings
+        // Sorted or character frequency same → anagram
+        if(str1.length()!=str2.length()){
+            return false;
+        }
+        char[] c1 = str1.toCharArray();
+        char[] c2 = str2.toCharArray();
+        Arrays.sort(c1);
+        Arrays.sort(c2);
+        return Arrays.equals(c1, c2);
+
     }
 
 }
