@@ -9,14 +9,16 @@ public class StringRelated {
     public static void main(String[] args) {
 
         String str = "Hello world";
-        reverseString(str);
+//        reverseString(str);
 //        createStringOutOfCharArray();
-//        getCountOfDistinctCharactersInString();
+        getCountOfDistinctCharactersInString();
 
 //        palindromeCheck("abcba"); // true
 //        palindromeCheck("abc"); // false
-        System.out.println(anagramCheck("race", "card")); // false
-        System.out.println(anagramCheck("listen", "silent")); // true
+//        System.out.println(anagramCheck("race", "card")); // false
+//        System.out.println(anagramCheck("listen", "silent")); // true
+
+
 
     }
 
@@ -39,10 +41,9 @@ public class StringRelated {
         String reversed = new StringBuilder(str).reverse().toString();
         System.out.println(reversed);
 //        // without built-in reverse()
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = str.length() - 1; i >= 0; i--) {
-//            result = result + str.charAt(i);
-            result += str.charAt(i);
+            result.append(str.charAt(i));
         }
 
         System.out.println(result);
@@ -91,6 +92,12 @@ public class StringRelated {
 
     private static void getCountOfDistinctCharactersInString() {
         String str1 = "abcdABCDabcd";
+        Map<Character, Long> countOfCharacters = str1.chars()
+                .mapToObj(i -> (char) i)
+                .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+        System.out.println(countOfCharacters);
+
+
         LinkedHashMap<Character, Long> charCounts = str1.chars()
                 .mapToObj(c -> (char) c)
                 .collect(Collectors.groupingBy(

@@ -22,6 +22,11 @@ public class PrimitiveStreams {
 
     }
 
+    public int countOdds(int low, int high) {
+        long count = IntStream.rangeClosed(low, high).filter(i->i%2==0).count();
+        return (int) count;
+    }
+
     private static void primitiveStreamsAPIs() {
         // These primitives stream in addition to containing many of the stream methods, also contain specialized methods
         // for working with numeric data

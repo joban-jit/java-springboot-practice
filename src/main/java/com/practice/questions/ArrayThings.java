@@ -2,21 +2,22 @@ package com.practice.questions;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ArrayThings {
 
     public static void main(String[] args) {
 
         //checkIfTwoArrayContainTheSameElements
-        int[] a1 = {1,2,3,2,1};
-        int[] a2 = {1,2,3};
-        int[] a3 = {1,4,3,2};
-        int[] a4 = {1,2,3,4};
+        int[] a1 = {1, 2, 3, 2, 1};
+        int[] a2 = {1, 2, 3};
+        int[] a3 = {1, 4, 3, 2};
+        int[] a4 = {1, 2, 3, 4};
         checkIfTwoArrayContainTheSameElements(a1, a2);
         checkIfTwoArrayContainTheSameElements(a4, a3);
 
         // get sum of all elements in an integer array in java
-        int[] array = { 1, 2, 3, 4, 5 };
+        int[] array = {1, 2, 3, 4, 5};
         int sum = getSumOfAllElementsInAnIntegerArray(array);
         System.out.println(sum);
 
@@ -34,13 +35,14 @@ public class ArrayThings {
 
         // largest in array using for loop
         findLargestInArray();
+        findMissingNumberInAnNaturalNumbersArray();
 
     }
 
     private static void shuffleAnArray() {
-        int[] array1 = { 1, 2, 3, 4, 5, 6, 7 };
+        int[] array1 = {1, 2, 3, 4, 5, 6, 7};
         Random rand = new Random();
-        for(int i=0;i<array1.length;i++){
+        for (int i = 0; i < array1.length; i++) {
             int randomIndex = rand.nextInt(array1.length);
             int temp = array1[randomIndex];
             array1[randomIndex] = array1[i];
@@ -57,7 +59,7 @@ public class ArrayThings {
 
     }
 
-    private static void secondLargestUsingSort(int[] arr){
+    private static void secondLargestUsingSort(int[] arr) {
         int[] array = Arrays.stream(arr)
                 .boxed()
                 .sorted(Comparator.reverseOrder())
@@ -67,25 +69,25 @@ public class ArrayThings {
     }
 
     private static void secondLargestUsingSortManually(int[] arr) {
-        int first = Integer.MIN_VALUE, second = Integer.MIN_VALUE;
-        for(int num : arr){
-            if(num>first){
-                second=first;
-                first = num;
-            }else if (num>second && num!=first){
+        int firstHighestValue  = Integer.MIN_VALUE, secondHighestValue  = Integer.MIN_VALUE;
+        for (int num : arr) {
+            if (num > firstHighestValue ) {
+                secondHighestValue  =  firstHighestValue ;
+                firstHighestValue  = num;
+            } else if (num > secondHighestValue  && num != firstHighestValue ) {
                 // this num!=first condition is used to handle duplicates largest number
-                second = num;
+                secondHighestValue  = num;
             }
         }
-        System.out.println("First Largest: "+first);
-        System.out.println("Second Largest: "+second);
+        System.out.println("First Largest: " + firstHighestValue);
+        System.out.println("Second Largest: " + secondHighestValue );
     }
 
     private static void minMaxInArray() {
-        int[] arr = {123,234,1121,1,432};
+        int[] arr = {123, 234, 1121, 1, 432};
         int max = Arrays.stream(arr).max().getAsInt();
         int min = Arrays.stream(arr).min().orElseThrow();
-        System.out.println("Max "+max+" Min: "+min);
+        System.out.println("Max " + max + " Min: " + min);
     }
 
     private static int getSumOfAllElementsInAnIntegerArray(int[] array) {
@@ -93,7 +95,7 @@ public class ArrayThings {
                 .sum();
     }
 
-    private static void checkIfTwoArrayContainTheSameElements(int[] ar1, int[] ar2){
+    private static void checkIfTwoArrayContainTheSameElements(int[] ar1, int[] ar2) {
 
         // Use Arrays.equals() - Checks order AND content
         // this doesn't sort or remove duplicate
@@ -116,17 +118,33 @@ public class ArrayThings {
 
     }
 
-    private static void findLargestInArray(){
+    private static void findLargestInArray() {
         int[] arr = {10, 20, 4, 100, 99};
 //        int largest = Integer.MIN_VALUE; // use this if you are not sure array is empty or not
         int largest = arr[0];
-        for(int num : arr){
-            if(num>largest){
+        for (int num : arr) {
+            if (num > largest) {
                 largest = num;
             }
         }
         System.out.println(largest);
     }
 
+    private static void findMissingNumberInAnNaturalNumbersArray(){
+        int[] nums = {1,2,3,4,6,7,8,9,10};
+        int missingNumber = 0;
+        for(int i=0;i<nums.length;i++){
+            if(i+1!=nums[i]){
+                missingNumber = i+1;
+                break;
+            }
+        }
+
+        System.out.println("Missing number is: "+missingNumber);
+
+
+
     }
+
+}
 
