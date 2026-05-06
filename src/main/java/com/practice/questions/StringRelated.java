@@ -151,19 +151,19 @@ public class StringRelated {
 
     }
 
-    private static void palindromeCheck(String str){
-        // madam
-        //string == reverse(string)
-        boolean isPalindromeCheck = true;
-        for(int i = 0;i<str.length()/2;i++){
-            if(str.charAt(i)!=str.charAt(str.length()-1-i)){
-                isPalindromeCheck = false;
-                break;
-            }
-        }
-        System.out.println(isPalindromeCheck);
-    }
+    private static boolean isPalindromeWithAlphaNumericAndCaseInsensitive(String s) {
+        StringBuilder newStr = new StringBuilder();
+        char[] sArray = s.toCharArray();
+        for(char c: sArray){
+            if(Character.isLetterOrDigit(c)){
+                newStr.append(Character.toLowerCase(c));
 
+            }
+
+        }
+        return newStr.toString().contentEquals(newStr.reverse());
+
+    }
     private static boolean anagramCheck(String str1, String str2){
         // race - care : same characters in both strings
         // Sorted or character frequency same → anagram
@@ -175,7 +175,26 @@ public class StringRelated {
         Arrays.sort(c1);
         Arrays.sort(c2);
         return Arrays.equals(c1, c2);
+        // another way is
+//        isAnagram(str1, str2);
+        
 
+    }
+
+    private static  boolean isAnagram(String s, String t) {
+        if(s.length() != t.length()){
+            return false;
+        }
+        char[] s1 = s.toCharArray();
+        char[] s2 = t.toCharArray();
+        Arrays.sort(s1);
+        Arrays.sort(s2);
+        for(int i=0;i<s1.length;i++){
+            if(s1[i]!=s2[i]){
+                return false;
+            }
+        }
+        return true;
     }
 
 }
