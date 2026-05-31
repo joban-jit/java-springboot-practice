@@ -201,7 +201,23 @@ public class DoublyLinkedList {
             }
         }
         return true;
+    }
 
+    public void reverse(){
+        if(this.head!=null){
+            Node current = this.head;
+            Node temp = this.head.prev;
+            while(current!=null){
+                temp = current.prev;
+
+                current.prev = current.next;
+                current.next = temp;
+                current = current.prev;
+            }
+            Node oldHead = this.head;
+            this.head = this.tail;
+            this.tail = oldHead;
+        }
     }
 
 }
